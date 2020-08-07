@@ -1,0 +1,84 @@
+<div class="app">
+  <div class="lobbyContainer">
+    <div class="leftSidebarContainer">
+      <div class="userListContainer">
+        <div class="userListContent">
+          <div class="userListItem" ng-repeat="user in outsideUserList">
+            <div class="userListItemUsername">{{user.username}}</div>
+            <div class="userListItemId">{{user.id}}</div>
+            <button class="userListItemInvite" ng-if="!user.isBanned" ng-click="inviteUser(user.id)">Invite</button>
+            <button class="userListItemUnban" ng-if="user.isBanned" ng-click="unbanUser(user.id)">Unban</button>
+          </div>
+        </div>
+      </div>
+      <div class="userListContainer">
+        <div class="userListContent">
+          <div class="userListItem" ng-repeat="user in inroomUserList">
+            <div class="userListItemUsername">{{user.username}}</div>
+            <div class="userListItemId">{{user.id}}</div>
+            <div class="creatorControl" ng-hide="isSelf(user.id)" ng-if="isCreatorOfRoom">
+            	<button class="userListItemKick" ng-click="kickUser(user.id)">Kick</button>
+            	<button class="userListItemban" ng-click="banUser(user.id)">Ban</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mainContainer">
+      <div class="mainContent">
+      	<div class="chatLeaveRoom">
+      		<button type="button" class="chatLeaveRoomButton" ng-click="onLeaveRoom()">Leave</button>
+      	</div>
+      	<div class="chatMessageSearch">
+      		<input type="text" name="chatMessageSearchInput" class="chatMessageSearchInput" ng-model="chatMessageSearchInput" placeholder="Filter with...">
+      	</div>
+      	<div class="chatMessages">
+      		<div class="chatMessageItem" ng-repeat="chatMessage in chatMessages | filter:chatMessageSearchInput">
+      			<div class="chatMessageFromUser">
+      				{{chatMessage.user.username}}({{chatMessage.user.id}})
+      			</div>
+      			<div class="chatMessageContent">
+      				{{chatMessage.content}}
+      			</div>
+      		</div>
+      	</div>
+      	<div class="chatMessageInputContainer">
+      		<input type="text" name="chatMessageInput" class="chatMessageInput" ng-model="chatMessageInput" placeholder="Message...">
+      		<button type="button" class="chatMessageInputSubmit" ng-click="onChatMessageInputSubmit()">Submit</button>
+      	</div>
+      </div>
+    </div>
+    <div ng-class="{privateMessages: true, 'privateMessages--on': isShowingPM, 'privateMessages--off': !isShowingPM}">
+      <div class="privateMessagesButton" ng-click="isShowingPM=!isShowingPM">PM</div>
+      <div class="privateMessagesContainer">
+        <div class="privateMessagesContent">
+          <div class="privateMessageItem" ng-repeat="message in privateMessages">
+            <div class="privateMessageItemContent">
+              {{message.content}}
+            </div>
+            <div class="privateMessageItemFrom">
+              From {{message.fromUser.name}} (ID: {{message.fromUser.id}})
+            </div>
+          </div>
+        </div>
+        <div class="privateMessagesInputContent">
+          <input class="privateMessageUserIdInput" type="text" ng-model="privateMessageUserIdInput" placeholder="User ID...">
+          <input class="privateMessageContentInput" type="text" ng-model="privateMessageContentInput" placeholder="Content...">
+          <button class="privateMessageSubmit" type="button" ng-click="onPrivateMessageSubmit()">Send</button>
+        </div>
+      </div>
+    </div>
+    <div ng-class="{adminMessages: true, 'adminMessages--on': isShowingAM, 'adminMessages--off': !isShowingAM}">
+      <div class="adminMessagesButton" ng-click="isShowingAM=!isShowingAM">ADMIN</div>
+      <div class="adminMessagesContainer">
+        <div class="adminMessagesContent">
+          <div class="adminMessageItem" ng-repeat="message in adminMessages">
+            <div class="adminMessageItemContent">
+              {{message.content}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
